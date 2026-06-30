@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GITA Wi-Fi Auto-Login Configurator</title>
+    <meta name="description" content="Generate custom Wi-Fi auto-login scripts for the GITA Sophos captive portal. No more typing credentials every time you boot your PC.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <span class="logo-icon">⚡</span>
+                <h1 class="gradient-text">GITA Wi-Fi Auto-Login</h1>
+            </div>
+            <p class="subtitle">Generate a custom installer to connect your Windows laptop automatically. Share this page with your friends!</p>
+        </header>
+
+        <main class="main-grid">
+            <section class="config-card glass-panel">
+                <h2>1. Configure Credentials</h2>
+                <p class="card-desc">Enter your login credentials. Everything is processed locally in your browser—your password is never sent to any server.</p>
+                
+                <form id="config-form" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <label for="username">Sophos Username / Wi-Fi ID</label>
+                        <input type="text" id="username" placeholder="......." required autocomplete="username">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Sophos Wi-Fi Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="portal-url">Sophos Portal Address</label>
+                        <input type="url" id="portal-url" value="http://20.2.0.1:8090" required placeholder="e.g., http://20.2.0.1:8090">
+                        <span class="input-help">Default gateway IP for the GITA network is pre-configured.</span>
+                    </div>
+
+                    <button type="submit" id="btn-download" class="btn-primary">
+                        <span class="btn-icon">📥</span>
+                        <span class="btn-text">Generate & Download ZIP</span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="instructions-card glass-panel">
+                <h2>2. Installation Guide</h2>
+                
+                <div class="tab-header">
+                    <button class="tab-btn active" id="btn-win">💻 Windows</button>
+                    <button class="tab-btn" id="btn-android">🤖 Android</button>
+                    <button class="tab-btn" id="btn-ios">🍎 iOS (iPhone)</button>
+                </div>
+
+                <!-- Windows Tab -->
+                <div id="tab-win" class="tab-content active">
+                    <div class="steps">
+                        <div class="step-item">
+                            <div class="step-badge">1</div>
+                            <div class="step-content">
+                                <h3>Download & Extract</h3>
+                                <p>Download the ZIP and extract it (Right-click -> <strong>Extract All...</strong>) to your Desktop or Documents folder.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">2</div>
+                            <div class="step-content">
+                                <h3>Run Setup</h3>
+                                <p>Open the folder and double-click <strong>`setup.bat`</strong>. Grant Administrator access when requested. The script will register the task.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">3</div>
+                            <div class="step-content">
+                                <h3>Verify Login</h3>
+                                <p>Once finished, you can close any Sophos browser login pages. The connection stays active completely in the background.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="separator">
+                    <div class="management-section">
+                        <h3>How to Stop / Uninstall</h3>
+                        <p>To stop the task and clean up all files, open the folder and double-click <strong>`uninstall.bat`</strong> (requires Administrator permission).</p>
+                    </div>
+                </div>
+
+                <!-- Android Tab -->
+                <div id="tab-android" class="tab-content">
+                    <p class="mobile-note">💡 <strong>Note:</strong> You do not need to download the ZIP file on your phone. Just follow the configuration steps below on your Android device:</p>
+                    <div class="steps">
+                        <div class="step-item">
+                            <div class="step-badge">1</div>
+                            <div class="step-content">
+                                <h3>Download MacroDroid</h3>
+                                <p>Download the free **MacroDroid** app from the Google Play Store to handle background Wi-Fi automation.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">2</div>
+                            <div class="step-content">
+                                <h3>Create Auto-Login Trigger</h3>
+                                <p>Create a macro. Trigger: <strong>Connectivity</strong> -> <strong>Wi-Fi Connection</strong> -> <strong>Connects</strong> -> select GITA Wi-Fi SSID.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">3</div>
+                            <div class="step-content">
+                                <h3>Set HTTP Action</h3>
+                                <p>
+                                    <strong>Action:</strong> Applications -> HTTP Request.<br>
+                                    <strong>Method:</strong> POST.<br>
+                                    <strong>URL:</strong> <code class="mobile-code">http://20.2.0.1:8090/login.xml</code>.<br>
+                                    <strong>Content Body:</strong> <code class="mobile-code">mode=191&username=YOUR_ID&password=YOUR_PASS&producttype=2</code>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">4</div>
+                            <div class="step-content">
+                                <h3>Add Heartbeat Loop</h3>
+                                <p>Set an action to trigger every 30 seconds when connected: HTTP <strong>GET</strong> to <code class="mobile-code">http://20.2.0.1:8090/live?mode=192&username=YOUR_ID&producttype=2</code> to keep the session alive.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- iOS Tab -->
+                <div id="tab-ios" class="tab-content">
+                    <p class="mobile-note">💡 <strong>Note:</strong> You do not need to download the ZIP file on your phone. Just follow the configuration steps below on your iPhone/iPad:</p>
+                    <div class="steps">
+                        <div class="step-item">
+                            <div class="step-badge">1</div>
+                            <div class="step-content">
+                                <h3>Open Shortcuts App</h3>
+                                <p>Launch the built-in **Shortcuts** app on your iPhone.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">2</div>
+                            <div class="step-content">
+                                <h3>Create Personal Automation</h3>
+                                <p>Tap **Automation** -> **+** -> **Create Personal Automation** -> **Wi-Fi** -> Network: Select GITA Wi-Fi -> Click Next.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">3</div>
+                            <div class="step-content">
+                                <h3>Set HTTP Action</h3>
+                                <p>
+                                    <strong>Action:</strong> Applications -> HTTP Request.<br>
+                                    <strong>Method:</strong> POST.<br>
+                                    <strong>URL:</strong> <code class="mobile-code">http://20.2.0.1:8090/login.xml</code>.<br>
+                                    <strong>Content Body:</strong> <code class="mobile-code">mode=191&username=YOUR_ID&password=YOUR_PASS&producttype=1</code>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-badge">4</div>
+                            <div class="step-content">
+                                <h3>Add Heartbeat Loop</h3>
+                                <p>Set an action to trigger every 30 seconds when connected: HTTP <strong>GET</strong> to <code class="mobile-code">http://20.2.0.1:8090/live?mode=192&username=YOUR_ID&producttype=1</code> to keep the session alive.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Help & FAQs Panel -->
+            <section class="help-section glass-panel">
+                <h2>💡 Help & Frequently Asked Questions</h2>
+                <div class="help-grid">
+                    <div class="help-item">
+                        <h3>Is there an easier 1-tap option for phones?</h3>
+                        <p>Yes! Simply log in once and select <strong>Save Password</strong> when prompted by Chrome (Google Password Manager) or Safari (iCloud Keychain). Next time, the page will autofill instantly, allowing you to connect in one tap.</p>
+                    </div>
+                    <div class="help-item">
+                        <h3>Is this script safe and secure?</h3>
+                        <p>Absolutely. The installer operates completely offline. Your credentials are stored strictly on your local device inside the <code>config.json</code> file. No data is ever sent to any third-party servers.</p>
+                    </div>
+                    <div class="help-item">
+                        <h3>How do I stop or uninstall the task?</h3>
+                        <p>On Windows, open your folder and double-click <code>uninstall.bat</code>. On Android, delete the MacroDroid macro. On iOS, delete the automation in your native Shortcuts app.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-links">
+                <a href="javascript:void(0)" id="privacy-link">Privacy Policy</a>
+            </div>
+            <div class="social-icons">
+                <!-- Gmail -->
+                <a href="mailto:sahoogyanaranjan480@gmail.com" class="social-icon" title="Email: sahoogyanaranjan480@gmail.com">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+                <!-- GitHub -->
+                <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/gyanaranjan-sahoo-596998217/" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+            </div>
+            <p>Made with ❤️ for GITA students. Works on Windows, Android & iOS.</p>
+        </footer>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="modal-close">&times;</span>
+            <h2>Privacy Policy</h2>
+            <div class="modal-body">
+                <p><strong>Your data is secured. We are not storing your data or any other details.</strong></p>
+                <p>GITA Wi-Fi Auto-Login operates entirely offline on your local device. Here is how our service works:</p>
+                <ul>
+                    <li><strong>No Server Collection:</strong> This website runs completely in your web browser (client-side). The credentials you enter are never uploaded to any server, database, or third-party service.</li>
+                    <li><strong>100% Safe:</strong> It is safe for all devices and takes tiny storage space and RAM which is completely negligible.</li>
+                    <li><strong>Local Storage only:</strong> On Windows, your username and password are saved inside a plain-text configuration file (<code>config.json</code>) in your local computer's AppData directory (<code>%APPDATA%\HostelWifiAutoLogin</code>). This is only used by your local Windows task to connect to the Sophos gateway.</li>
+                    <li><strong>Mobile Safe:</strong> On mobile devices, we guide you to use native tools (iOS Shortcuts) or reputable third-party apps (MacroDroid) to handle the network requests locally on your phone. No logins are stored on this site.</li>
+                </ul>
+                <p>If you have any security concerns, you can verify the code in the downloaded script files before running the setup.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
