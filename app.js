@@ -1,4 +1,4 @@
-﻿/*!
+/*!
 
 JSZip v3.10.1 - A JavaScript class for generating and reading zip files
 <http://stuartk.com/jszip>
@@ -386,45 +386,275 @@ if (privacyLink && modal && closeBtn) {
     }
 }
 
-// 4. Tab switching logic
+// ============================================================
+//  UI INIT — Redesigned Site
+// ============================================================
+
+// 4. Tabs
 function setupTabs() {
-    const tabWin = document.getElementById("tab-win");
-    const tabAndroid = document.getElementById("tab-android");
-    const tabIos = document.getElementById("tab-ios");
-
-    const btnWin = document.getElementById("btn-win");
-    const btnAndroid = document.getElementById("btn-android");
-    const btnIos = document.getElementById("btn-ios");
-
-    if (!tabWin || !tabAndroid || !tabIos || !btnWin || !btnAndroid || !btnIos) return;
-
-    function deactivateAll() {
-        tabWin.classList.remove("active");
-        tabAndroid.classList.remove("active");
-        tabIos.classList.remove("active");
-
-        btnWin.classList.remove("active");
-        btnAndroid.classList.remove("active");
-        btnIos.classList.remove("active");
-    }
-
-    btnWin.onclick = function() {
-        deactivateAll();
-        tabWin.classList.add("active");
-        btnWin.classList.add("active");
-    }
-
-    btnAndroid.onclick = function() {
-        deactivateAll();
-        tabAndroid.classList.add("active");
-        btnAndroid.classList.add("active");
-    }
-
-    btnIos.onclick = function() {
-        deactivateAll();
-        tabIos.classList.add("active");
-        btnIos.classList.add("active");
-    }
+    var tabs   = ['tab-win','tab-android','tab-ios'];
+    var btns   = ['btn-win','btn-android','btn-ios'];
+    btns.forEach(function(btnId, i) {
+        var btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.addEventListener('click', function() {
+            tabs.forEach(function(t) { var el=document.getElementById(t); if(el) el.classList.remove('active'); });
+            btns.forEach(function(b) { var el=document.getElementById(b); if(el) el.classList.remove('active'); });
+            var tab = document.getElementById(tabs[i]);
+            if (tab) tab.classList.add('active');
+            btn.classList.add('active');
+        });
+    });
 }
 setupTabs();
+
+// 5. Sticky Navbar
+(function() {
+    var navbar = document.getElementById('navbar');
+    if (!navbar) return;
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 40) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+    });
+})();
+
+// 6. Hamburger Menu
+(function() {
+    var btn    = document.getElementById('nav-hamburger');
+    var mobile = document.getElementById('nav-mobile');
+    if (!btn || !mobile) return;
+    btn.addEventListener('click', function() {
+        mobile.classList.toggle('open');
+    });
+    // Close on link click
+    mobile.querySelectorAll('.nav-mobile-link').forEach(function(link) {
+        link.addEventListener('click', function() { mobile.classList.remove('open'); });
+    });
+})();
+
+// 7. Smooth scroll for nav links (close mobile menu too)
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// 8. Privacy Modal
+(function() {
+    var link    = document.getElementById('privacy-link');
+    var modal   = document.getElementById('privacy-modal');
+    var closeBtn = document.getElementById('modal-close-btn');
+    if (!link || !modal) return;
+    link.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('open'); });
+    if (closeBtn) closeBtn.addEventListener('click', function() { modal.classList.remove('open'); });
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') modal.classList.remove('open'); });
+})();
+
+// 9. Network Persistence Section
+(function () {
+    var radioCards   = document.querySelectorAll('.radio-card');
+    var togAdapter   = document.getElementById('tog-adapter');
+    var togSleep     = document.getElementById('tog-sleep');
+    var togLid       = document.getElementById('tog-lid');
+    var togBattery   = document.getElementById('tog-battery');
+    var previewBody  = document.getElementById('persist-preview-body');
+    var btnDownload  = document.getElementById('btn-persist-download');
+    if (!previewBody || !btnDownload) return;
+
+    // Radio card clicks
+    radioCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+            radioCards.forEach(function(c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+            renderPreview();
+        });
+        var radio = card.querySelector('input[type="radio"]');
+        if (radio && radio.checked) card.classList.add('selected');
+    });
+
+    // Toggle changes
+    [togAdapter, togSleep, togLid, togBattery].forEach(function(t) {
+        if (t) t.addEventListener('change', renderPreview);
+    });
+
+    function getTarget() {
+        var checked = document.querySelector('input[name="conn-target"]:checked');
+        return checked ? checked.value : 'both';
+    }
+
+    function renderPreview() {
+        var target  = getTarget();
+        var adapter = togAdapter  && togAdapter.checked;
+        var sleep   = togSleep    && togSleep.checked;
+        var lid     = togLid      && togLid.checked;
+        var battery = togBattery  && togBattery.checked;
+        var targetLabel = target === 'both' ? 'Wi-Fi + Hotspot' : target === 'wifi' ? 'Wi-Fi Only' : 'Hotspot Only';
+        var rows = [
+            { label: '🎯 Connection Target',    value: targetLabel,               on: true },
+            { label: '🔌 Adapter Power Saving', value: adapter ? 'Disabled' : 'Default', on: adapter },
+            { label: '🌙 Wi-Fi During Sleep',   value: sleep   ? 'Always On' : 'Default', on: sleep },
+            { label: '💻 Lid Close Action',     value: lid     ? 'Do Nothing' : 'Default', on: lid },
+            { label: '🔋 Apply on Battery',     value: battery ? 'Yes' : 'No',    on: battery },
+        ];
+        previewBody.innerHTML = rows.map(function(r) {
+            return '<div class="preview-row ' + (r.on ? 'on' : 'off') + '">' +
+                '<span class="preview-row-label">' + r.label + '</span>' +
+                '<span class="preview-row-value">' + r.value + '</span>' +
+                '</div>';
+        }).join('');
+    }
+
+    function buildScript() {
+        var target  = getTarget();
+        var adapter = togAdapter  && togAdapter.checked;
+        var sleep   = togSleep    && togSleep.checked;
+        var lid     = togLid      && togLid.checked;
+        var battery = togBattery  && togBattery.checked;
+        var scope   = battery ? 'AC and DC (Battery)' : 'AC (Plugged In) only';
+        var targetLabel = target === 'both' ? 'Wi-Fi + Hotspot' : target === 'wifi' ? 'Wi-Fi Only' : 'Hotspot Only';
+
+        var s = '@echo off\r\n';
+        s += 'echo ================================================\r\n';
+        s += 'echo  GITA Network Persistence Setup\r\n';
+        s += 'echo  Generated by gitaconnection.online\r\n';
+        s += 'echo ================================================\r\n';
+        s += 'echo.\r\n';
+        s += 'echo [INFO] Target: ' + targetLabel + '\r\n';
+        s += 'echo [INFO] Scope : ' + scope + '\r\n';
+        s += 'echo.\r\n\r\n';
+
+        if (adapter) {
+            s += 'echo [STEP 1] Disabling Wi-Fi adapter power saving...\r\n';
+            s += 'powershell -NoProfile -ExecutionPolicy Bypass -Command "^\r\n';
+            s += '  $path = \'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\'; ^\r\n';
+            s += '  Get-ChildItem $path -EA SilentlyContinue | ForEach-Object { ^\r\n';
+            s += '    $d = (Get-ItemProperty $_.PSPath -EA SilentlyContinue).DriverDesc; ^\r\n';
+            s += '    if ($d -like \'*Wi-Fi*\' -or $d -like \'*Wireless*\' -or $d -like \'*WLAN*\') { ^\r\n';
+            s += '      Set-ItemProperty $_.PSPath -Name PnPCapabilities -Value 24 -EA SilentlyContinue; ^\r\n';
+            s += '      Write-Host \'  [OK] \' $d }}"\r\n\r\n';
+        } else {
+            s += 'echo [STEP 1] Skipped - Adapter power saving unchanged.\r\n\r\n';
+        }
+
+        if (sleep) {
+            s += 'echo [STEP 2] Keeping Wi-Fi alive during sleep...\r\n';
+            s += 'powercfg /setacvalueindex SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 0\r\n';
+            if (battery) s += 'powercfg /setdcvalueindex SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 0\r\n';
+            s += 'echo   [OK] Wi-Fi stays on during sleep.\r\n\r\n';
+        } else {
+            s += 'echo [STEP 2] Skipped - Wi-Fi sleep behavior unchanged.\r\n\r\n';
+        }
+
+        if (lid) {
+            s += 'echo [STEP 3] Setting lid close to Do Nothing...\r\n';
+            s += 'powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 0\r\n';
+            if (battery) s += 'powercfg /setdcvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 0\r\n';
+            s += 'echo   [OK] Lid close will not sleep the laptop.\r\n\r\n';
+        } else {
+            s += 'echo [STEP 3] Skipped - Lid close action unchanged.\r\n\r\n';
+        }
+
+        s += 'echo [STEP 4] Applying power plan...\r\n';
+        s += 'powercfg /setactive SCHEME_CURRENT\r\n';
+        s += 'echo   [OK] Done.\r\n\r\n';
+
+        if (target === 'wifi' || target === 'both')
+            s += 'echo [TIP] Set up campus Wi-Fi auto-login at gitaconnection.online\r\n';
+        if (target === 'hotspot' || target === 'both')
+            s += 'echo [TIP] Keep your mobile hotspot ON before closing the lid.\r\n';
+
+        s += 'echo.\r\n';
+        s += 'echo ================================================\r\n';
+        s += 'echo  All done! Network will stay connected.\r\n';
+        s += 'echo ================================================\r\n';
+        s += 'pause\r\n';
+        return s;
+    }
+
+    btnDownload.addEventListener('click', function() {
+        var blob = new Blob([buildScript()], { type: 'text/plain' });
+        var url  = URL.createObjectURL(blob);
+        var a    = document.createElement('a');
+        a.href = url;
+        a.download = 'network_persist_setup.bat';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        var icon = btnDownload.querySelector('.btn-icon');
+        var txt  = btnDownload.querySelector('.btn-text');
+        var origTxt = txt.textContent;
+        icon.textContent = '✅';
+        txt.textContent  = 'Script Downloaded!';
+        setTimeout(function() { icon.textContent = '⬇️'; txt.textContent = origTxt; }, 2500);
+    });
+
+    // Uninstall script
+    var btnUninstall = document.getElementById('btn-persist-uninstall');
+    if (btnUninstall) {
+        btnUninstall.addEventListener('click', function() {
+            var s = '@echo off\r\n';
+            s += 'echo ================================================\r\n';
+            s += 'echo  GITA Network Persistence - UNINSTALL\r\n';
+            s += 'echo  Restoring Windows defaults\r\n';
+            s += 'echo  Generated by gitaconnection.online\r\n';
+            s += 'echo ================================================\r\n';
+            s += 'echo.\r\n\r\n';
+
+            s += 'echo [STEP 1] Restoring Wi-Fi adapter power saving...\r\n';
+            s += 'powershell -NoProfile -ExecutionPolicy Bypass -Command "^\r\n';
+            s += '  $path = \'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\'; ^\r\n';
+            s += '  Get-ChildItem $path -EA SilentlyContinue | ForEach-Object { ^\r\n';
+            s += '    $d = (Get-ItemProperty $_.PSPath -EA SilentlyContinue).DriverDesc; ^\r\n';
+            s += '    if ($d -like \'*Wi-Fi*\' -or $d -like \'*Wireless*\' -or $d -like \'*WLAN*\') { ^\r\n';
+            s += '      Remove-ItemProperty $_.PSPath -Name PnPCapabilities -EA SilentlyContinue; ^\r\n';
+            s += '      Write-Host \'  [OK] Restored: \' $d }}"\r\n\r\n';
+
+            s += 'echo [STEP 2] Restoring Wi-Fi sleep behavior to Windows default...\r\n';
+            s += 'powercfg /setacvalueindex SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 2\r\n';
+            s += 'powercfg /setdcvalueindex SCHEME_CURRENT 19cbb8fa-5279-450e-9fac-8a3d5fedd0c1 12bbebe6-58d6-4636-95bb-3217ef867c1a 4\r\n';
+            s += 'echo   [OK] Wi-Fi sleep behavior restored.\r\n\r\n';
+
+            s += 'echo [STEP 3] Restoring lid close action to Sleep...\r\n';
+            s += 'powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 1\r\n';
+            s += 'powercfg /setdcvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 1\r\n';
+            s += 'echo   [OK] Lid close will now sleep the laptop (default).\r\n\r\n';
+
+            s += 'echo [STEP 4] Applying restored power plan...\r\n';
+            s += 'powercfg /setactive SCHEME_CURRENT\r\n';
+            s += 'echo   [OK] Done.\r\n\r\n';
+
+            s += 'echo ================================================\r\n';
+            s += 'echo  Uninstall complete! All settings restored.\r\n';
+            s += 'echo  Your laptop will behave as before.\r\n';
+            s += 'echo ================================================\r\n';
+            s += 'pause\r\n';
+
+            var blob = new Blob([s], { type: 'text/plain' });
+            var url  = URL.createObjectURL(blob);
+            var a    = document.createElement('a');
+            a.href = url;
+            a.download = 'network_persist_uninstall.bat';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            var icon2 = btnUninstall.querySelector('.btn-icon');
+            var txt2  = btnUninstall.querySelector('.btn-text');
+            var orig2 = txt2.textContent;
+            icon2.textContent = '✅';
+            txt2.textContent  = 'Uninstall Script Downloaded!';
+            setTimeout(function() { icon2.textContent = '🗑️'; txt2.textContent = orig2; }, 2500);
+        });
+    }
+
+    renderPreview();
+})();
+
 

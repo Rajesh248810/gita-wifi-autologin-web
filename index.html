@@ -3,245 +3,556 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GITA Wi-Fi Auto-Login Configurator</title>
-    <meta name="description" content="Generate custom Wi-Fi auto-login scripts for the GITA Sophos captive portal. No more typing credentials every time you boot your PC.">
-    <!-- Google Fonts -->
+    <title>GITA Connect — Campus Network Tools</title>
+    <meta name="description" content="Auto-login to GITA campus Wi-Fi and keep your network alive during sleep. Free tools for GITA Autonomous College students.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-glow"></div>
-    <div class="container">
-        <header>
-            <div class="logo-area">
-                <span class="logo-icon">⚡</span>
-                <h1 class="gradient-text">GITA Wi-Fi Auto-Login</h1>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <span class="nav-logo-icon">⚡</span>
+                <span class="nav-logo-text">GITA<span class="nav-logo-accent">Connect</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#autologin" class="nav-link">Auto-Login</a>
+                <a href="#persistence" class="nav-link">Stay Connected</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#terms" class="nav-link">T&amp;C</a>
+                <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener" class="nav-cta">GitHub ↗</a>
             </div>
-            <p class="subtitle">Generate a custom installer to connect your Windows laptop automatically. Share this page with your friends!</p>
-        </header>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div class="nav-mobile" id="nav-mobile">
+            <a href="#autologin" class="nav-mobile-link">Auto-Login</a>
+            <a href="#persistence" class="nav-mobile-link">Stay Connected</a>
+            <a href="#faq" class="nav-mobile-link">FAQ</a>
+            <a href="#terms" class="nav-mobile-link">Terms &amp; Conditions</a>
+            <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener" class="nav-mobile-link">GitHub ↗</a>
+        </div>
+    </nav>
 
-        <main class="main-grid">
-            <section class="config-card glass-panel">
-                <h2>1. Configure Credentials</h2>
-                <p class="card-desc">Enter your login credentials. Everything is processed locally in your browser—your password is never sent to any server.</p>
-                
-                <form id="config-form" onsubmit="event.preventDefault();">
-                    <div class="input-group">
-                        <label for="username">Sophos Username / Wi-Fi ID</label>
-                        <input type="text" id="username" placeholder="......." required autocomplete="username">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="password">Sophos Wi-Fi Password</label>
-                        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="portal-url">Sophos Portal Address</label>
-                        <input type="url" id="portal-url" value="http://20.2.0.1:8090" required placeholder="e.g., http://20.2.0.1:8090">
-                        <span class="input-help">Default gateway IP for the GITA network is pre-configured.</span>
-                    </div>
-
-                    <button type="submit" id="btn-download" class="btn-primary">
-                        <span class="btn-icon">📥</span>
-                        <span class="btn-text">Generate & Download ZIP</span>
-                    </button>
-                </form>
-            </section>
-
-            <section class="instructions-card glass-panel">
-                <h2>2. Installation Guide</h2>
-                
-                <div class="tab-header">
-                    <button class="tab-btn active" id="btn-win">💻 Windows</button>
-                    <button class="tab-btn" id="btn-android">🤖 Android</button>
-                    <button class="tab-btn" id="btn-ios">🍎 iOS (iPhone)</button>
-                </div>
-
-                <!-- Windows Tab -->
-                <div id="tab-win" class="tab-content active">
-                    <div class="steps">
-                        <div class="step-item">
-                            <div class="step-badge">1</div>
-                            <div class="step-content">
-                                <h3>Download & Extract</h3>
-                                <p>Download the ZIP and extract it (Right-click -> <strong>Extract All...</strong>) to your Desktop or Documents folder.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">2</div>
-                            <div class="step-content">
-                                <h3>Run Setup</h3>
-                                <p>Open the folder and double-click <strong>`setup.bat`</strong>. Grant Administrator access when requested. The script will register the task.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">3</div>
-                            <div class="step-content">
-                                <h3>Verify Login</h3>
-                                <p>Once finished, you can close any Sophos browser login pages. The connection stays active completely in the background.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="separator">
-                    <div class="management-section">
-                        <h3>How to Stop / Uninstall</h3>
-                        <p>To stop the task and clean up all files, open the folder and double-click <strong>`uninstall.bat`</strong> (requires Administrator permission).</p>
-                    </div>
-                </div>
-
-                <!-- Android Tab -->
-                <div id="tab-android" class="tab-content">
-                    <p class="mobile-note">💡 <strong>Note:</strong> You do not need to download the ZIP file on your phone. Just follow the configuration steps below on your Android device:</p>
-                    <div class="steps">
-                        <div class="step-item">
-                            <div class="step-badge">1</div>
-                            <div class="step-content">
-                                <h3>Download MacroDroid</h3>
-                                <p>Download the free **MacroDroid** app from the Google Play Store to handle background Wi-Fi automation.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">2</div>
-                            <div class="step-content">
-                                <h3>Create Auto-Login Trigger</h3>
-                                <p>Create a macro. Trigger: <strong>Connectivity</strong> -> <strong>Wi-Fi Connection</strong> -> <strong>Connects</strong> -> select GITA Wi-Fi SSID.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">3</div>
-                            <div class="step-content">
-                                <h3>Set HTTP Action</h3>
-                                <p>
-                                    <strong>Action:</strong> Applications -> HTTP Request.<br>
-                                    <strong>Method:</strong> POST.<br>
-                                    <strong>URL:</strong> <code class="mobile-code">http://20.2.0.1:8090/login.xml</code>.<br>
-                                    <strong>Content Body:</strong> <code class="mobile-code">mode=191&username=YOUR_ID&password=YOUR_PASS&producttype=2</code>.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">4</div>
-                            <div class="step-content">
-                                <h3>Add Heartbeat Loop</h3>
-                                <p>Set an action to trigger every 30 seconds when connected: HTTP <strong>GET</strong> to <code class="mobile-code">http://20.2.0.1:8090/live?mode=192&username=YOUR_ID&producttype=2</code> to keep the session alive.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- iOS Tab -->
-                <div id="tab-ios" class="tab-content">
-                    <p class="mobile-note">💡 <strong>Note:</strong> You do not need to download the ZIP file on your phone. Just follow the configuration steps below on your iPhone/iPad:</p>
-                    <div class="steps">
-                        <div class="step-item">
-                            <div class="step-badge">1</div>
-                            <div class="step-content">
-                                <h3>Open Shortcuts App</h3>
-                                <p>Launch the built-in **Shortcuts** app on your iPhone.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">2</div>
-                            <div class="step-content">
-                                <h3>Create Personal Automation</h3>
-                                <p>Tap **Automation** -> **+** -> **Create Personal Automation** -> **Wi-Fi** -> Network: Select GITA Wi-Fi -> Click Next.</p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">3</div>
-                            <div class="step-content">
-                                <h3>Set HTTP Action</h3>
-                                <p>
-                                    <strong>Action:</strong> Applications -> HTTP Request.<br>
-                                    <strong>Method:</strong> POST.<br>
-                                    <strong>URL:</strong> <code class="mobile-code">http://20.2.0.1:8090/login.xml</code>.<br>
-                                    <strong>Content Body:</strong> <code class="mobile-code">mode=191&username=YOUR_ID&password=YOUR_PASS&producttype=1</code>.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="step-item">
-                            <div class="step-badge">4</div>
-                            <div class="step-content">
-                                <h3>Add Heartbeat Loop</h3>
-                                <p>Set an action to trigger every 30 seconds when connected: HTTP <strong>GET</strong> to <code class="mobile-code">http://20.2.0.1:8090/live?mode=192&username=YOUR_ID&producttype=1</code> to keep the session alive.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Help & FAQs Panel -->
-            <section class="help-section glass-panel">
-                <h2>💡 Help & Frequently Asked Questions</h2>
-                <div class="help-grid">
-                    <div class="help-item">
-                        <h3>Is there an easier 1-tap option for phones?</h3>
-                        <p>Yes! Simply log in once and select <strong>Save Password</strong> when prompted by Chrome (Google Password Manager) or Safari (iCloud Keychain). Next time, the page will autofill instantly, allowing you to connect in one tap.</p>
-                    </div>
-                    <div class="help-item">
-                        <h3>Is this script safe and secure?</h3>
-                        <p>Absolutely. The installer operates completely offline. Your credentials are stored strictly on your local device inside the <code>config.json</code> file. No data is ever sent to any third-party servers.</p>
-                    </div>
-                    <div class="help-item">
-                        <h3>How do I stop or uninstall the task?</h3>
-                        <p>On Windows, open your folder and double-click <code>uninstall.bat</code>. On Android, delete the MacroDroid macro. On iOS, delete the automation in your native Shortcuts app.</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="footer-links">
-                <a href="javascript:void(0)" id="privacy-link">Privacy Policy</a>
-            </div>
-            <div class="social-icons">
-                <!-- Gmail -->
-                <a href="mailto:sahoogyanaranjan480@gmail.com" class="social-icon" title="Email: sahoogyanaranjan480@gmail.com">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+    <!-- ── HERO ── -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="hero-inner">
+            <div class="hero-badge">🎓 For GITA Autonomous College Students</div>
+            <h1 class="hero-title">
+                GITA Campus Wi-Fi<br>
+                <span class="gradient-text">Auto-Connect Tool</span>
+            </h1>
+            <p class="hero-subtitle">Automatically log in to the campus Sophos portal every time you connect — no more manual logins. Also keep your Wi-Fi alive during sleep for uninterrupted downloads.</p>
+            <div class="hero-actions">
+                <a href="#autologin" class="btn-hero-primary">
+                    <span>⚡ Auto-Login Tool</span>
                 </a>
-                <!-- GitHub -->
-                <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                </a>
-                <!-- LinkedIn -->
-                <a href="https://www.linkedin.com/in/gyanaranjan-sahoo-596998217/" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                <a href="#persistence" class="btn-hero-secondary">
+                    <span>🔒 Stay Connected Tool</span>
                 </a>
             </div>
-            <p>Made with ❤️ for GITA students. Works on Windows, Android & iOS.</p>
-        </footer>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-num">3</span>
+                    <span class="stat-label">Platforms</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">0</span>
+                    <span class="stat-label">Data Collected</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Free & Open Source</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 1: AUTO-LOGIN ── -->
+    <section class="tool-section" id="autologin">
+        <div class="section-inner">
+            <div class="section-label">Tool 01</div>
+            <h2 class="section-title">Wi-Fi Auto-Login</h2>
+            <p class="section-subtitle">Generate a silent background script that logs you into the Sophos captive portal automatically — every time you connect to campus Wi-Fi.</p>
+
+            <div class="tool-grid">
+                <!-- Config Form -->
+                <div class="tool-card glass-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">🔐</div>
+                        <div>
+                            <h3 class="tool-card-title">Configure Credentials</h3>
+                            <p class="tool-card-desc">Processed 100% locally. Your password never leaves your device.</p>
+                        </div>
+                    </div>
+
+                    <form id="config-form" onsubmit="event.preventDefault();">
+                        <div class="input-group">
+                            <label for="username">Sophos Username / Wi-Fi ID</label>
+                            <input type="text" id="username" placeholder="e.g., 2200289xxx" required autocomplete="username">
+                        </div>
+                        <div class="input-group">
+                            <label for="password">Sophos Wi-Fi Password</label>
+                            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                        </div>
+                        <div class="input-group">
+                            <label for="portal-url">Sophos Portal Address</label>
+                            <input type="url" id="portal-url" value="http://20.2.0.1:8090" required placeholder="http://20.2.0.1:8090">
+                            <span class="input-hint">Pre-configured for GITA campus network.</span>
+                        </div>
+                        <button type="submit" id="btn-download" class="btn-primary">
+                            <span class="btn-icon">📥</span>
+                            <span class="btn-text">Generate &amp; Download ZIP</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Installation Guide -->
+                <div class="tool-card glass-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">📋</div>
+                        <div>
+                            <h3 class="tool-card-title">Installation Guide</h3>
+                            <p class="tool-card-desc">Choose your platform and follow the steps below.</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-header">
+                        <button class="tab-btn active" id="btn-win">💻 Windows</button>
+                        <button class="tab-btn" id="btn-android">🤖 Android</button>
+                        <button class="tab-btn" id="btn-ios">🍎 iOS</button>
+                    </div>
+
+                    <!-- Windows -->
+                    <div id="tab-win" class="tab-content active">
+                        <div class="steps">
+                            <div class="step-item">
+                                <div class="step-badge">1</div>
+                                <div class="step-content">
+                                    <h4>Download &amp; Extract</h4>
+                                    <p>Download the ZIP and extract it (Right-click → <strong>Extract All...</strong>) to your Desktop or Documents.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">2</div>
+                                <div class="step-content">
+                                    <h4>Run Setup</h4>
+                                    <p>Double-click <code>setup.bat</code> and grant Administrator access. The script registers as a Windows Task.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">3</div>
+                                <div class="step-content">
+                                    <h4>Done!</h4>
+                                    <p>Close any Sophos login pages. You're connected silently in the background forever.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uninstall-note">
+                            <span>🗑️</span>
+                            <p>To uninstall: double-click <code>uninstall.bat</code> (requires Admin).</p>
+                        </div>
+                    </div>
+
+                    <!-- Android -->
+                    <div id="tab-android" class="tab-content">
+                        <div class="mobile-note-bar">💡 No ZIP needed on Android — just follow these steps.</div>
+                        <div class="steps">
+                            <div class="step-item">
+                                <div class="step-badge">1</div>
+                                <div class="step-content">
+                                    <h4>Download MacroDroid</h4>
+                                    <p>Install the free <strong>MacroDroid</strong> app from Google Play Store.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">2</div>
+                                <div class="step-content">
+                                    <h4>Create Trigger</h4>
+                                    <p>Trigger: <strong>Connectivity → Wi-Fi Connection → Connects →</strong> select GITA Wi-Fi SSID.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">3</div>
+                                <div class="step-content">
+                                    <h4>Set HTTP Action</h4>
+                                    <p><strong>Method:</strong> POST &nbsp;|&nbsp; <strong>URL:</strong> <code>http://20.2.0.1:8090/login.xml</code><br>
+                                    <strong>Body:</strong> <code>mode=191&amp;username=ID&amp;password=PASS&amp;producttype=2</code></p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">4</div>
+                                <div class="step-content">
+                                    <h4>Add Heartbeat</h4>
+                                    <p>Every 30s: HTTP GET to <code>http://20.2.0.1:8090/live?mode=192&amp;username=ID&amp;producttype=2</code></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- iOS -->
+                    <div id="tab-ios" class="tab-content">
+                        <div class="mobile-note-bar">💡 No ZIP needed on iPhone — use the built-in Shortcuts app.</div>
+                        <div class="steps">
+                            <div class="step-item">
+                                <div class="step-badge">1</div>
+                                <div class="step-content">
+                                    <h4>Open Shortcuts App</h4>
+                                    <p>Launch the built-in <strong>Shortcuts</strong> app on your iPhone.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">2</div>
+                                <div class="step-content">
+                                    <h4>Create Automation</h4>
+                                    <p>Tap <strong>Automation → + → Personal Automation → Wi-Fi →</strong> select GITA network → Next.</p>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-badge">3</div>
+                                <div class="step-content">
+                                    <h4>Set HTTP Action</h4>
+                                    <p><strong>Method:</strong> POST &nbsp;|&nbsp; <strong>URL:</strong> <code>http://20.2.0.1:8090/login.xml</code><br>
+                                    <strong>Body:</strong> <code>mode=191&amp;username=ID&amp;password=PASS&amp;producttype=1</code></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── DIVIDER ── -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-label">SCROLL FOR MORE TOOLS</div>
+        <div class="divider-line"></div>
     </div>
 
-    <!-- Privacy Policy Modal -->
+    <!-- ── SECTION 2: NETWORK PERSISTENCE ── -->
+    <section class="tool-section section-alt" id="persistence">
+        <div class="section-inner">
+            <div class="section-label">Tool 02</div>
+            <h2 class="section-title">Stay Connected During Sleep</h2>
+            <p class="section-subtitle">Keep your Wi-Fi or Hotspot alive even when your laptop lid is closed. Customize the settings, preview in real-time, and download a one-click setup script.</p>
+
+            <div class="persist-warning-banner">
+                <span>⚠️</span>
+                <p><strong>Windows Only.</strong> Run the generated script as Administrator. Battery drains faster with lid closed — use a charger for overnight downloads.</p>
+            </div>
+
+            <div class="persist-layout">
+                <!-- Options Column -->
+                <div class="persist-options-col">
+
+                    <!-- Connection Target -->
+                    <div class="option-card glass-card">
+                        <div class="option-card-header">
+                            <span class="option-card-tag">STEP 1</span>
+                            <h3>Connection Target</h3>
+                            <p>Which connection should stay active while sleeping?</p>
+                        </div>
+                        <div class="radio-cards" id="connection-target">
+                            <label class="radio-card selected" id="rc-both">
+                                <input type="radio" name="conn-target" value="both" checked>
+                                <div class="rc-top">
+                                    <div class="rc-icon">📶</div>
+                                    <div class="rc-check">✓</div>
+                                </div>
+                                <div class="rc-label">Both</div>
+                                <div class="rc-desc">Wi-Fi + Hotspot</div>
+                            </label>
+                            <label class="radio-card" id="rc-wifi">
+                                <input type="radio" name="conn-target" value="wifi">
+                                <div class="rc-top">
+                                    <div class="rc-icon">🛜</div>
+                                    <div class="rc-check">✓</div>
+                                </div>
+                                <div class="rc-label">Wi-Fi Only</div>
+                                <div class="rc-desc">Campus network</div>
+                            </label>
+                            <label class="radio-card" id="rc-hotspot">
+                                <input type="radio" name="conn-target" value="hotspot">
+                                <div class="rc-top">
+                                    <div class="rc-icon">📱</div>
+                                    <div class="rc-check">✓</div>
+                                </div>
+                                <div class="rc-label">Hotspot Only</div>
+                                <div class="rc-desc">Mobile tethering</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Toggles -->
+                    <div class="option-card glass-card">
+                        <div class="option-card-header">
+                            <span class="option-card-tag">STEP 2</span>
+                            <h3>Advanced Settings</h3>
+                            <p>Fine-tune what gets modified on your system.</p>
+                        </div>
+                        <div class="toggle-list">
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="toggle-title">Disable Adapter Power Saving</span>
+                                    <span class="toggle-desc">Prevents Windows from turning off the Wi-Fi adapter to save power.</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tog-adapter" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="toggle-title">Keep Wi-Fi Active During Sleep</span>
+                                    <span class="toggle-desc">Maintains the network connection in low-power sleep mode.</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tog-sleep" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="toggle-title">Lid Close → Do Nothing</span>
+                                    <span class="toggle-desc">Laptop keeps running and downloading when you close the lid.</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tog-lid" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="toggle-title">Apply on Battery Too</span>
+                                    <span class="toggle-desc">Apply all settings for battery power, not just when plugged in.</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tog-battery" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview + Download Column -->
+                <div class="persist-preview-col">
+                    <div class="preview-card glass-card sticky-preview">
+                        <div class="preview-header">
+                            <div class="preview-live">
+                                <span class="preview-dot" id="preview-dot"></span>
+                                <span>Live Preview</span>
+                            </div>
+                            <span class="preview-sub">Updates as you configure</span>
+                        </div>
+
+                        <div class="preview-body" id="persist-preview-body">
+                            <!-- JS populated -->
+                        </div>
+
+                        <div class="preview-script-box">
+                            <div class="script-box-label">
+                                <span class="script-icon">📄</span>
+                                <span>Generated File</span>
+                            </div>
+                            <code class="script-filename" id="script-filename-label">network_persist_setup.bat</code>
+                        </div>
+
+                        <button class="btn-primary btn-download-persist" id="btn-persist-download">
+                            <span class="btn-icon">⬇️</span>
+                            <span class="btn-text">Generate &amp; Download Setup Script</span>
+                        </button>
+
+                        <div class="btn-divider">
+                            <span>or</span>
+                        </div>
+
+                        <button class="btn-uninstall" id="btn-persist-uninstall">
+                            <span class="btn-icon">🗑️</span>
+                            <span class="btn-text">Generate Uninstall Script</span>
+                        </button>
+
+                        <p class="download-hint">Both scripts require <strong>Run as Administrator</strong>. The uninstall script fully restores Windows defaults.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" id="faq">
+        <div class="section-inner">
+            <div class="section-label">Support</div>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item glass-card">
+                    <div class="faq-q">Is this script safe?</div>
+                    <div class="faq-a">Absolutely. Everything runs locally on your device. No credentials are uploaded to any server. You can inspect every line of the generated script.</div>
+                </div>
+                <div class="faq-item glass-card">
+                    <div class="faq-q">Does it work on mobile?</div>
+                    <div class="faq-a">Yes! Android uses MacroDroid and iOS uses the native Shortcuts app. Follow the guide in the Auto-Login section above.</div>
+                </div>
+                <div class="faq-item glass-card">
+                    <div class="faq-q">How do I uninstall?</div>
+                    <div class="faq-a">On Windows, double-click <code>uninstall.bat</code> in the downloaded folder. On Android, delete the MacroDroid macro. On iOS, delete the Shortcut automation.</div>
+                </div>
+                <div class="faq-item glass-card">
+                    <div class="faq-q">What does Network Persistence do?</div>
+                    <div class="faq-a">It stops Windows from disconnecting your Wi-Fi or Hotspot when the laptop sleeps or the lid is closed — perfect for overnight downloads.</div>
+                </div>
+                <div class="faq-item glass-card">
+                    <div class="faq-q">Is there a 1-tap login for phones?</div>
+                    <div class="faq-a">Yes! Log in once and save the password in Chrome (Google Password Manager) or Safari (iCloud Keychain). Future logins will auto-fill in one tap.</div>
+                </div>
+                <div class="faq-item glass-card">
+                    <div class="faq-q">Will it work after a password change?</div>
+                    <div class="faq-a">On Windows, re-generate a new ZIP with your new password and re-run <code>setup.bat</code>. On mobile, update the MacroDroid or Shortcuts action manually.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── TERMS & CONDITIONS ── -->
+    <section class="tnc-section" id="terms">
+        <div class="section-inner">
+            <div class="section-label">Legal</div>
+            <h2 class="section-title">Terms &amp; Conditions</h2>
+            <p class="section-subtitle">Please read these terms carefully before using GITAConnect tools. By downloading or running any script from this website, you agree to the following.</p>
+
+            <div class="tnc-grid">
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">📌</div>
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing this website or using any script, tool, or file generated by GITAConnect, you confirm that you have read, understood, and agreed to these Terms &amp; Conditions. If you do not agree, please do not use this service.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">🎓</div>
+                    <h3>2. Purpose &amp; Eligibility</h3>
+                    <p>GITAConnect tools are developed strictly for personal, educational, and non-commercial use by students of GITA Autonomous College, Bhubaneswar. This service is not officially affiliated with, endorsed by, or approved by GITA Autonomous College or its administration.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">⚠️</div>
+                    <h3>3. Use at Your Own Risk</h3>
+                    <p>All scripts and tools are provided <strong>"as is"</strong> without any warranty of any kind. The developer is not responsible for any damage, data loss, account suspension, or network policy violations that may result from using these tools. Users are solely responsible for ensuring their usage complies with their institution's IT and network policies.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">🔐</div>
+                    <h3>4. Data &amp; Privacy</h3>
+                    <p>GITAConnect does <strong>not</strong> collect, store, transmit, or process any personal data including usernames, passwords, or device information. All credential processing happens entirely within your own browser and device. No data is ever sent to any external server.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">🖥️</div>
+                    <h3>5. System Modifications</h3>
+                    <p>The Network Persistence tool modifies Windows power management settings and registry values. These changes are reversible using the provided uninstall script. The developer is not liable for any unintended system behaviour resulting from running these scripts. Always run scripts as Administrator only when you trust the source.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">📜</div>
+                    <h3>6. Open Source &amp; License</h3>
+                    <p>All source code for GITAConnect is available on <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener" class="tnc-link">GitHub</a> and is released under the <strong>MIT License</strong>. You are free to inspect, modify, and distribute the code with attribution. No warranty is provided under this license.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">🚫</div>
+                    <h3>7. Prohibited Use</h3>
+                    <p>You may not use GITAConnect to: (a) bypass security measures for malicious purposes, (b) access or interfere with other users' accounts or data, (c) distribute modified versions that contain harmful code, or (d) use credentials of another person without their explicit consent.</p>
+                </div>
+
+                <div class="tnc-card glass-card">
+                    <div class="tnc-card-icon">✏️</div>
+                    <h3>8. Changes to Terms</h3>
+                    <p>These terms may be updated at any time without prior notice. Continued use of GITAConnect after any changes constitutes your acceptance of the revised terms. It is your responsibility to review this section periodically.</p>
+                </div>
+
+                <div class="tnc-card glass-card tnc-card-full">
+                    <div class="tnc-card-icon">📬</div>
+                    <h3>9. Contact &amp; Grievances</h3>
+                    <p>If you have any questions, concerns, or grievances regarding these terms or the tools provided, please reach out via email at <a href="mailto:sahoogyanaranjan480@gmail.com" class="tnc-link">sahoogyanaranjan480@gmail.com</a>. We will respond within a reasonable time.</p>
+                </div>
+
+            </div>
+
+            <div class="tnc-footer-note">
+                <span>📅</span>
+                <p>Last updated: <strong>July 2026</strong> &nbsp;|&nbsp; These terms apply to all users accessing gitaconnection.online and any associated scripts or tools.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="nav-logo-icon">⚡</span>
+                    <span class="footer-brand-name">GITA<span class="nav-logo-accent">Connect</span></span>
+                    <p class="footer-tagline">Free campus network tools built for GITA Autonomous College students.</p>
+                </div>
+                <div class="footer-links-group">
+                    <div class="footer-col">
+                        <div class="footer-col-title">Tools</div>
+                        <a href="#autologin" class="footer-link">Wi-Fi Auto-Login</a>
+                        <a href="#persistence" class="footer-link">Network Persistence</a>
+                    </div>
+                    <div class="footer-col">
+                        <div class="footer-col-title">Resources</div>
+                        <a href="#faq" class="footer-link">FAQ</a>
+                        <a href="#terms" class="footer-link">Terms &amp; Conditions</a>
+                        <a href="javascript:void(0)" id="privacy-link" class="footer-link">Privacy Policy</a>
+                        <a href="https://github.com/Rajesh248810" target="_blank" rel="noopener" class="footer-link">GitHub ↗</a>
+                    </div>
+                    <div class="footer-col">
+                        <div class="footer-col-title">Contact</div>
+                        <a href="mailto:sahoogyanaranjan480@gmail.com" class="footer-link">Email</a>
+                        <a href="https://www.linkedin.com/in/gyanaranjan-sahoo-596998217/" target="_blank" rel="noopener" class="footer-link">LinkedIn ↗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 GITAConnect. Made with ❤️ for GITA students. Works on Windows, Android &amp; iOS.</p>
+                <p>Open source · No data collected · 100% free</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Privacy Modal -->
     <div id="privacy-modal" class="modal">
-        <div class="modal-content glass-panel">
-            <span class="modal-close">&times;</span>
+        <div class="modal-content glass-card">
+            <button class="modal-close" id="modal-close-btn">✕</button>
             <h2>Privacy Policy</h2>
             <div class="modal-body">
-                <p><strong>Your data is secured. We are not storing your data or any other details.</strong></p>
-                <p>GITA Wi-Fi Auto-Login operates entirely offline on your local device. Here is how our service works:</p>
+                <p><strong>Your data is 100% safe — we store nothing.</strong></p>
+                <p>GITAConnect operates entirely offline in your browser. Here's exactly how it works:</p>
                 <ul>
-                    <li><strong>No Server Collection:</strong> This website runs completely in your web browser (client-side). The credentials you enter are never uploaded to any server, database, or third-party service.</li>
-                    <li><strong>100% Safe:</strong> It is safe for all devices and takes tiny storage space and RAM which is completely negligible.</li>
-                    <li><strong>Local Storage only:</strong> On Windows, your username and password are saved inside a plain-text configuration file (<code>config.json</code>) in your local computer's AppData directory (<code>%APPDATA%\HostelWifiAutoLogin</code>). This is only used by your local Windows task to connect to the Sophos gateway.</li>
-                    <li><strong>Mobile Safe:</strong> On mobile devices, we guide you to use native tools (iOS Shortcuts) or reputable third-party apps (MacroDroid) to handle the network requests locally on your phone. No logins are stored on this site.</li>
+                    <li><strong>No Server Collection:</strong> Credentials you enter are never uploaded to any server, database, or third-party service.</li>
+                    <li><strong>Local Only:</strong> On Windows, your credentials are saved inside <code>config.json</code> in your local AppData directory, used only by your Windows Task.</li>
+                    <li><strong>Mobile Safe:</strong> On mobile, we guide you to use native tools (iOS Shortcuts / MacroDroid). No logins are ever stored on this website.</li>
+                    <li><strong>Open Source:</strong> Every line of the generated scripts can be inspected before running.</li>
                 </ul>
-                <p>If you have any security concerns, you can verify the code in the downloaded script files before running the setup.</p>
             </div>
         </div>
     </div>
-    
+
     <script src="app.js"></script>
 </body>
 </html>
