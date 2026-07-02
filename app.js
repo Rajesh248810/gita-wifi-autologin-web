@@ -245,6 +245,21 @@ const SETUP_BAT = `@echo off
 title Install GITA Wi-Fi Auto-Login
 cd /d "%~dp0"
 
+:: Check if the folder is extracted
+if not exist "install.ps1" (
+    color 0C
+    echo ========================================================
+    echo  ERROR: PLEASE EXTRACT THE ZIP FILE FIRST!
+    echo ========================================================
+    echo  Do not run "setup.bat" directly from inside the ZIP.
+    echo  Right-click the downloaded ZIP and select "Extract All..."
+    echo  then run setup.bat from the extracted folder.
+    echo ========================================================
+    echo.
+    pause
+    exit
+)
+
 net session >nul 2>&1
 if %errorLevel% == 0 (
     echo [=] Running with Administrator privileges...
@@ -254,13 +269,28 @@ if %errorLevel% == 0 (
     pause >nul
 ) else (
     echo [!] Administrator privileges required. Requesting elevation...
-    powershell -Command "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c \"\"%~dpnx0\"\"' -Verb RunAs"
+    powershell -Command "Start-Process -FilePath 'cmd.exe' -ArgumentList '/k \"cd /d \"\"%~dp0\"\" && \"\"%~dpnx0\"\"\"' -Verb RunAs"
 )
 `;
 
 const UNINSTALL_BAT = `@echo off
 title Uninstall GITA Wi-Fi Auto-Login
 cd /d "%~dp0"
+
+:: Check if the folder is extracted
+if not exist "uninstall.ps1" (
+    color 0C
+    echo ========================================================
+    echo  ERROR: PLEASE EXTRACT THE ZIP FILE FIRST!
+    echo ========================================================
+    echo  Do not run "uninstall.bat" directly from inside the ZIP.
+    echo  Right-click the downloaded ZIP and select "Extract All..."
+    echo  then run uninstall.bat from the extracted folder.
+    echo ========================================================
+    echo.
+    pause
+    exit
+)
 
 net session >nul 2>&1
 if %errorLevel% == 0 (
@@ -271,7 +301,7 @@ if %errorLevel% == 0 (
     pause >nul
 ) else (
     echo [!] Administrator privileges required. Requesting elevation...
-    powershell -Command "Start-Process -FilePath 'cmd.exe' -ArgumentList '/c \"\"%~dpnx0\"\"' -Verb RunAs"
+    powershell -Command "Start-Process -FilePath 'cmd.exe' -ArgumentList '/k \"cd /d \"\"%~dp0\"\" && \"\"%~dpnx0\"\"\"' -Verb RunAs"
 )
 `;
 
